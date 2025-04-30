@@ -101,7 +101,7 @@ The sample we were running above, "experiment 1", is located in [spasic.experime
 
    1. Create a package under `spasic.experiment` to hold your files.
 
-So that's a directory under there, including at least an `__init__.py` file.  In theory, it's name can be any valid python package name, but it's recommended you name it according to the design you're testing, e.g. `tt_um_factory_test`.
+So that's a directory under there, including at least an `__init__.py` file.  In theory, its name can be any valid python package name, but it's recommended you name it according to the design you're testing, e.g. `tt_um_factory_test`.
 
    2. Create a module which contains your experiment/test code.
    
