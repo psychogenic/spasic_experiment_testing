@@ -244,7 +244,7 @@ All right, pretty much done here.
 
 The final thing is to inform the system that this experiment exists to make it available.
 
-Edit [experiment_list.py](spasic/experiment_list.py) and 
+Edit [experiment_list.py](spasic/experiment/experiment_list.py) and 
 
    1. add the import of your loader
 
