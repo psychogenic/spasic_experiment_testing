@@ -190,7 +190,7 @@ def my_superduper_test(params:ExperimentParameters, response:ExpResult):
 
 With the test module done, we need a way to bring it into the system.
 
-For reasons (mainly memory conservation and the fact that we can do dynamic imports in micropython), we have to use a loader function that hides the heavy imports from view until we actually need them.
+For reasons (mainly memory conservation and the fact that we can not do dynamic imports in micropython), we have to use a loader function that hides the heavy imports from view until we actually need them.
 
 So, in that same package, create another module that will contain the loader function.
 
