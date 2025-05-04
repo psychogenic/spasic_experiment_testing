@@ -128,7 +128,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
 
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
     # Pi Approximation via ( sqrt(58)/4 - 37sqrt(2)/33)^-1
@@ -150,7 +150,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -169,7 +169,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -188,7 +188,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -207,7 +207,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -226,7 +226,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -245,7 +245,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     response.result = status_string + fpu_result
     if not params.keep_running:
         # have been asked to terminate, make note and return
-        response.result[3] = 0x1
+        status_string[3] = 0x1
         response.result = status_string + fpu_result
         return 
 
@@ -264,16 +264,8 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     status_string[2] = 0x7
     response.result = status_string + fpu_result
 
-    # Expected Result: 3.140869140625 (numerical errors add up)
+    # Expected Result: 3.140869140625 (b'\x81\xc9\x04') (numerical errors add up)
     # Expected Output: bytearray(b'\x00\x00\x07\x00\x00\x81\xc9\x04'
 
-    return 
-
-
-                
-    
-    
-    
-    
-    
-    
+    return
+ 
