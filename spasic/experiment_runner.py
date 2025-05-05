@@ -126,7 +126,7 @@ class ExperimentRunner:
         if not self.experiment_id:
             print("No experiment run!")
             return 
-        if self.experiment_completed:
+        if not self.experiment_running:
             print("Already done!")
             self.status()
             
@@ -134,7 +134,7 @@ class ExperimentRunner:
         print(f"Monitoring experiment {self.experiment_id}...")
         self.status()
         bts = bytearray()
-        while not self.experiment_completed:
+        while self.experiment_running:
             if self.experiment_result != bts:
                 print()
                 self.status()
@@ -142,7 +142,7 @@ class ExperimentRunner:
         
         print()
         print()
-        print("Experiment run completed!  Final status:")
+        print("Experiment done!  Final status:")
         self.status()
                 
             
