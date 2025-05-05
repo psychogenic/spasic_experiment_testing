@@ -70,6 +70,16 @@ The following methods and attributes are supported
    
    * `abort()`: a request will be sent to the experiment to complete now. You must respect this request in your test.
    
+In addition, there are a few utility attributes/methods that make things easier:
+   
+   * `experiment_results_as_str`: gives you a representation of the bytes, like "0x3 0x0 0x7 0x0 0x0 0xff 0xff 0xff"
+   
+   * `status()`: prints out a summary of the experiment state (completed, runtime, result)
+   
+   * `monitor_until_completed()`: reports any changes to the results (by calling `status()`) during a run, and exits when the experiment stops running
+   
+ 
+   
 ### Sample Interaction
    
 Here's a sample of launching an experiment and monitoring its status as it runs
@@ -80,16 +90,40 @@ Here's a sample of launching an experiment and monitoring its status as it runs
     if not runner.launch(1):
         raise Exception("Ugh couldn't do it")
     
-    # while it's running, periodically output status info
-    while runner.experiment_running:
-        time.sleep(1)
-        runner.status()
+    runner.monitor_until_completed()
     
     # ok, we're done
     if runner.experiment_completed:
         print(f"Experiment completed after {runner.experiment_duration}s")
     else:
         print(f"Not running but not completed either... exception is: {runner.experiment_exception}")
+```
+
+This might output something like:
+
+
+```
+Launching experiment 1
+Experiment 1 running (2s)
+        Current results: 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+
+Experiment 1 running (2s)
+        Current results: 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+        
+Experiment 1 running (9s)
+        Current results: 0x3 0x0 0x2 0x0 0x0 0xff 0xff 0xff
+
+Experiment 1 running (21s)
+        Current results: 0x3 0x0 0x6 0x0 0x0 0xff 0xff 0xff
+
+Experiment 1 completed after 23s
+  Final results: 0x3 0x0 0x7 0x0 0x0 0xff 0xff 0xff
+
+Experiment done!  Final status:
+Experiment 2 completed after 23s
+  Final results: 0x3 0x0 0x7 0x0 0x0 0xff 0xff 0xff
+
+Experiment completed after 23s
 ```
 
 
