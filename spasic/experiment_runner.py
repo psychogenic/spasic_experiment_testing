@@ -117,6 +117,34 @@ class ExperimentRunner:
         runner = ExperimentsAvailable[experiment_id]
         return runner
     
+    def monitor_until_completed(self, sleep_interval:float=0.25):
+        
+        if not self.experiment_id:
+            print("No experiment run!")
+            return 
+        if self.experiment_completed:
+            print("Already done!")
+            self.status()
+            
+        
+        print(f"Monitoring experiment {self.experiment_id}...")
+        self.status()
+        bts = bytearray()
+        while not self.experiment_completed:
+            if self.experiment_result != bts:
+                print()
+                self.status()
+                bts = bytearray(self.experiment_result)
+        
+        print()
+        print()
+        print("Experiment run completed!  Final status:")
+        self.status()
+                
+            
+            
+        
+    
     def trigger_loader_in_mainthread(self, experiment_id:int, experiment_parameters:bytearray=None):
         '''
             A utility method for debugging
