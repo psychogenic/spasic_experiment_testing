@@ -59,9 +59,6 @@ def add(ser):
     time.sleep(0.5)
     ser.write(b'\x88')
 
-def add(ser):
-    time.sleep(0.5)
-    ser.write(b'\x88')
 
 def sub(ser):
     time.sleep(0.5)
