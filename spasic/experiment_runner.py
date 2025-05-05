@@ -42,7 +42,7 @@ class ExperimentRunner:
     def status(self):
         if self.experiment_running:
             print(f'Experiment {self.experiment_id} running ({self.experiment_duration}s)')
-            print(f'\tCurrent results: {self.experiment_result}')
+            print(f'\tCurrent results: {self.experiment_results_as_str}')
             return 
         
         if self.experiment_id == 0:
@@ -51,16 +51,16 @@ class ExperimentRunner:
         
         if self.experiment_completed:
             print(f'Experiment {self.experiment_id} completed after {self.experiment_duration}s')
-            print(f'  Final results: {self.experiment_result}')
+            print(f'  Final results: {self.experiment_results_as_str}')
             return
         
         if self.experiment_exception is not None:
             print(f'Experiment {self.experiment_id} had exception after {self.experiment_exception}')
-            print(f'  Final results: {self.experiment_result}')
+            print(f'  Final results: {self.experiment_results_as_str}')
             return 
         
         print(f'Experiment {self.experiment_id} is marked neither as completed nor as having exception??')
-        print(f'  Final results: {self.experiment_result}')
+        print(f'  Final results: {self.experiment_results_as_str}')
         
             
             
@@ -86,6 +86,10 @@ class ExperimentRunner:
             return self._result.result[:10]
         
         return self._result.result
+    
+    @property 
+    def experiment_results_as_str(self):
+        return ' '.join(map(lambda x: hex(x), self._result.result))
     
     @property 
     def experiment_completed(self):
