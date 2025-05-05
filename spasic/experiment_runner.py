@@ -104,6 +104,40 @@ class ExperimentRunner:
             Run time in seconds of experiment
         '''
         return self._result.run_duration
+    
+    def get_loader(self, experiment_id:int):
+        
+        if not isinstance(experiment_id, int):
+            raise RuntimeError('Must pass experiment id as INTEGER') 
+
+        if experiment_id not in ExperimentsAvailable:
+            print(f"I'm not aware of experiment {experiment_id}.  Add it to ExperimentsAvailable")
+            return False 
+        
+        runner = ExperimentsAvailable[experiment_id]
+        return runner
+    
+    def trigger_loader_in_mainthread(self, experiment_id:int, experiment_parameters:bytearray=None):
+        '''
+            A utility method for debugging
+        
+        '''
+        runner = self.get_loader(experiment_id)
+        
+        if not runner:
+            print(f"Could not fetch runner for exp {experiment_id}")
+            return False
+        
+        if experiment_parameters is None:
+            experiment_parameters = bytearray(10)
+        
+        self._result.expid = experiment_id
+        self._result.start()
+        self._params.start(experiment_parameters)
+        
+        runner(self._params, self._result)
+
+        
         
     def launch(self, experiment_id:int, experiment_parameters:bytearray=None):
         '''
@@ -113,13 +147,9 @@ class ExperimentRunner:
             @return: True on launch success
         
         '''
-        if not isinstance(experiment_id, int):
-            raise RuntimeError('Must pass experiment id as INTEGER') 
         if experiment_parameters is None:
             experiment_parameters = bytearray(10)
-        elif not isinstance(experiment_parameters, (bytearray, bytes)):
-            raise RuntimeError('Must pass experiment params as bytearray')
-        
+
         parm_len = len(experiment_parameters) 
         if parm_len> 10:
             experiment_parameters = experiment_parameters[:10]
@@ -130,15 +160,15 @@ class ExperimentRunner:
             print(f"Can't launch!  Experiment {self._result.expid} is currently running")
             return False 
         
-        if experiment_id not in ExperimentsAvailable:
-            print(f"I'm not aware of experiment {experiment_id}.  Add it to ExperimentsAvailable")
-            return False 
+        runner = self.get_loader(experiment_id)
+        if not runner:
+            print(f"Could not fetch runner for exp {experiment_id}")
+            return False
         
         self._result.expid = experiment_id
         self._result.start()
         self._params.start(experiment_parameters)
-        
-        runner = ExperimentsAvailable[experiment_id]
+
         
         print(f"Launching experiment {experiment_id}")
         try:
