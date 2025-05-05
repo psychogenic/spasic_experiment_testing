@@ -23,22 +23,40 @@ def setR2(ser, x):
     time.sleep(0.5)
     ser.write(x)
 
+def readFromSer(ser, numbytes):
+    # was occasionally getting None from read()
+    # this ensures we have as many bytes as 
+    # expected, in a form with 'buffer protocol' support
+    result = ser.read(numbytes)
+    if result is None:
+        return bytearray([0xff]*numbytes)
+    
+    if len(result) == numbytes:
+        return result 
+    
+    bts = bytearray(result)
+    if len(bts) < numbytes:
+        bts.extend([0]*(numbytes - len(bts)))
+        
+    return bts
+
 def readRes(ser):
     time.sleep(0.5)
     ser.write(b'\x87')
-    result = ser.read(3)
+    result = readFromSer(ser, 3)
+    
     return result
 
 def readR1(ser):
     time.sleep(0.5)
     ser.write(b'\x85')
-    result = ser.read(3)
+    result = readFromSer(ser, 3)
     return result
 
 def readR2(ser):
     time.sleep(0.5)
     ser.write(b'\x86')
-    result = ser.read(3)
+    result = readFromSer(ser, 3)
     return result
 
 def moveResToR1(ser):
