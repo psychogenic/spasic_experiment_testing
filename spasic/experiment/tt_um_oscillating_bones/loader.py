@@ -18,7 +18,13 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
         import spasic.experiment.tt_um_oscillating_bones.counter
         
         # run that experiment
-        spasic.experiment.tt_um_oscillating_bones.counter.test_counter(params, response, num_iterations=16)
+        """
+        window_size = int.from_bytes(params.argument_bytes[0], 'little')
+        if window_size == 0:
+            window_size = 16 # default
+        """
+        window_size = 16
+        spasic.experiment.tt_um_oscillating_bones.counter.test_counter(params, response, window_size=window_size)
         
     except Exception as e:
         # an exception occurred... 

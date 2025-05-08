@@ -27,15 +27,23 @@ TIMING_PULSE_FREQUENCY = 8  # 8 Hz
 TIMING_PULSE_SM_ID = 0
 PULSE_COUNTER_SM_ID = 1
 
-def test_counter(params:ExperimentParameters, response:ExpResult, num_iterations:int=50):
-    # we'll send a simple response result, 7 bytes
-    # FAILURECOUNT[0..3]  NUM_ITERATIONS CURRENT_ITERATION INTERRUPTED
-    response.result = bytearray(7)
+
+# Moving average filter configuration
+N = 64  # Moving average window size
+index = 0
+total = 0
+
+def test_counter(params:ExperimentParameters, response:ExpResult, window_size:int=16):
+    # first byte is number of times we've got a measurement
+    # next 3 bytes is the average of all the measurements
+    response.result = bytearray(4)
     
-    # num iterations won't change, so we can stick this in 
-    # the response immediately
-    response.result[4] = num_iterations
-    
+    # allocate moving average buffer
+    global N, buffer
+    N = window_size
+    buffer = [0] * N
+    print(f"moving average window is {N}")
+
     # get the TT DemoBoard object from params passed in
     tt = params.tt 
     
@@ -61,39 +69,40 @@ def test_counter(params:ExperimentParameters, response:ExpResult, num_iterations
     pulse_counter.start()
     print("pulse counter started")
 
-    try:
+    # make measurements continuously
+    loops = 0
+    while params.keep_running:
+        timing_pulse_count = pulse_counter.read_timing_count()
+        if timing_pulse_count == 1:
+            pulse_count = pulse_counter.read_pulse_count()
+            avg = update_average(pulse_count)
+            loops += 1
+            response.result[0] = loops
+            response.result[1:4] = avg.to_bytes(3, 'little')
+            print(loops, pulse_count, avg)
+        elif timing_pulse_count == -1:
+            continue
 
-        # Just print the timing pulse count
-        while True:
-            timing_pulse_count = pulse_counter.read_timing_count()
-            #print(timing_pulse_count)
-            if timing_pulse_count == 1:
-                pulse_count = pulse_counter.read_pulse_count()
-                if (
-                    pulse_count > 1_000_000
-                ):  # change to MHz if the frequency is too high
-                    pulse_count_m = pulse_count / 1_000_000
-                    print(
-                        f"Generated PWM Frequency: {pwm_test_signal.freq() / 1_000_000} MHz, Gate Time: {pulse_counter.timing_interval_ms} ms, PIO raw count: {pulse_count}, Frequency: {pulse_count_m / pulse_counter.timing_interval_ms * 1000} MHz"
-                    )
-                elif pulse_count > 1000:  # change to kHz if the frequency is too high
-                    pulse_count_k = pulse_count / 1000
-                    print(
-                        f"Generated PWM Frequency: {pwm_test_signal.freq() / 1000} kHz, Gate Time: {pulse_counter.timing_interval_ms} ms, PIO raw count: {pulse_count}, Frequency: {pulse_count_k / pulse_counter.timing_interval_ms * 1000} kHz"
-                    )
-                else:
-                    print(
-                        f"Generated PWM Frequency: {pwm_test_signal.freq()} Hz, Gate Time: {pulse_counter.timing_interval_ms} ms, PIO raw count: {pulse_count}, Frequency: {pulse_count / pulse_counter.timing_interval_ms * 1000} Hz"
-                    )
-            elif timing_pulse_count == -1:
-                continue
-            # else:
-            #    print(f"Timing Pulse Count: {timing_pulse_count}")
+    # shutdown
+    print("stopping pulse counter")
+    pulse_counter.stop()
+    print("stopping pwm")
+    pwm_test_signal.deinit()
 
-    except KeyboardInterrupt:
-        pulse_counter.stop()
-        print("Stopped the pulse counter")
-        print("Exiting the program")
+def update_average(new_value):
+    global index, total
+
+    # Subtract old value, add new one
+    total -= buffer[index]
+    total += new_value
+
+    # Store new value in circular buffer
+    buffer[index] = new_value
+    index = (index + 1) % N
+
+    # Compute average
+    avg = total // N
+    return avg
 
 # PIO program to count pulses, the gate time is controlled a side-set pin set by another PIO program
 @asm_pio(autopush=True, push_thresh=32, fifo_join=PIO.JOIN_RX)
