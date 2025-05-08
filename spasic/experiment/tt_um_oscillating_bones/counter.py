@@ -3,6 +3,11 @@ Created on May 8, 2025
 
 @author: Matt Venn
 @copyright: Copyright (C) 2025 Matt Venn
+
+RP2040 frequency counter code is from:
+
+https://github.com/intel00000/pi_pico_pio_pwm_frequency_measurement
+
 '''
 import time
 from spasic.experiment.experiment_result import ExpResult
@@ -33,13 +38,16 @@ N = 64  # Moving average window size
 index = 0
 total = 0
 
+# call like this to set the window to 8: runner.launch(3,[8])
 def test_counter(params:ExperimentParameters, response:ExpResult, window_size:int=16):
     # first byte is number of times we've got a measurement
     # next 3 bytes is the average of all the measurements
     response.result = bytearray(4)
     
     # allocate moving average buffer
-    global N, buffer
+    global N, buffer, index, total
+    index = 0
+    total = 0
     N = window_size
     buffer = [0] * N
     print(f"moving average window is {N}")
