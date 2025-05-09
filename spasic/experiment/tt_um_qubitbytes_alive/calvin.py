@@ -30,29 +30,31 @@ M=[
 
 T_IDX=13
 
-def pick()->tuple[int,list]:
- i=[x for x in range(len(M)) if x!=T_IDX]
- c=random.choice(i)
- return c,M[c]
 
-def test_charlie(params: ExperimentParameters, snoopy: ExpResult, num_iterations: int = 50):
- i,m=pick()
- snoopy.result=bytearray(m)
- tt=params.tt
- tt.uio_oe_pico.value=0
- tt.shuttle.tt_um_qubitbytes_alive.enable()
- tt.reset_project(True)
- tt.clock_project_once()
- tt.reset_project(False)
- v=int(tt.uo_out.value)
- tt.clock_project_PWM(100000)
- for _ in range(num_iterations):
-  while v!=79:
-   v=int(tt.uo_out.value)
-   if not params.keep_running:
+def pick() -> tuple[int, list]:
+    i = [x for x in range(len(M)) if x != T_IDX]
+    c = random.choice(i)
+    return c, M[c]
+
+
+def test_charlie(params: ExperimentParameters, snoopy: ExpResult, num_iterations: int=50):
+    i, m = pick()
+    snoopy.result = bytearray(m)
+    tt = params.tt
+    tt.uio_oe_pico.value = 0
+    tt.shuttle.tt_um_qubitbytes_alive.enable()
+    tt.reset_project(True)
+    tt.clock_project_once()
+    tt.reset_project(False)
+    v = int(tt.uo_out.value)
+    tt.clock_project_PWM(100000)
+    for _ in range(num_iterations):
+        while v != 79:
+            v = int(tt.uo_out.value)
+            if not params.keep_running:
+                tt.clock_project_stop()
+                snoopy.result = bytearray(M[T_IDX])
+                return
     tt.clock_project_stop()
-    snoopy.result=bytearray(M[T_IDX])
+    snoopy.result = bytearray(m)
     return
- tt.clock_project_stop()
- snoopy.result=bytearray(m)
- return
