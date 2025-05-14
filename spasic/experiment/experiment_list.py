@@ -7,6 +7,7 @@ import spasic.experiment.tt_um_test.loader
 import spasic.experiment.tt_um_fstolzcode.loader
 import spasic.experiment.tt_um_oscillating_bones.loader
 import spasic.experiment.tt_um_qubitbytes_alive.loader
+import spasic.experiment.tt_um_urish_spell.loader
 
 ExperimentsAvailable = {
     
@@ -21,5 +22,8 @@ ExperimentsAvailable = {
         
         # calvin!  
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
+
+        # SPELL
+        5: spasic.experiment.tt_um_urish_spell.loader.run_experiment,
     }
 
