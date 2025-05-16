@@ -24,7 +24,7 @@ ExperimentsAvailable = {
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
 
         # SEU detector in ttrpgdice
-        5: spasic.experiment.tt_um_ttrpg_SEU.loader.run_experiment,
+        6: spasic.experiment.tt_um_ttrpg_SEU.loader.run_experiment,
 
     }
 

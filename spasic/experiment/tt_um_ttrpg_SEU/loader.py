@@ -15,11 +15,11 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
         # import HERE, inside the function, 
         # such that loading all the experiment runners doesn't 
         # eat a ton of memory by pre-importing everything
-        import spasic.experiment.tt_um_ttrpgdice_sanojn.SEU_detector
+        import spasic.experiment.tt_um_ttrpg_SEU.SEU_detector
         
         # run that experiment
         print("Calling test_SEU")
-        spasic.experiment.tt_um_ttrpgdice_sanojn.SEU_detector.test_SEU(params, response, timeout=30)
+        spasic.experiment.tt_um_ttrpg_SEU.SEU_detector.test_SEU(params, response, timeout=30)
         
     except Exception as e:
         # an exception occurred... 
