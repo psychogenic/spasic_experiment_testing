@@ -1,9 +1,10 @@
 '''
 Created on Apr 30, 2025
 
-@author: Pat Deegan
-@copyright: Copyright (C) 2025 Pat Deegan, https://psychogenic.com
+@author: Andrewtron3000
+@copyright: Copyright (C) 2025 Andrewtron3000 (https://github.com/andrewtron3000)
 '''
+
 import time
 import struct
 
