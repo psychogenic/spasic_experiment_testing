@@ -84,7 +84,7 @@ def run_test(params:ExperimentParameters, response:ExpResult, num_iterations:int
                 # have been asked to terminate
                 response = set_error_response(response)
                 return 
-            # Clear out the UART and the result
+            # Perform a read to empty UART data
             uart.read(BUF_SIZE_BYTES)
 
         # Start clocking the design
@@ -93,13 +93,21 @@ def run_test(params:ExperimentParameters, response:ExpResult, num_iterations:int
         # release from reset
         tt.reset_project(False)
 
-        # Pull data from the UART and store in the response result.
+        # Read data from the UART.
         uart_data = uart.read(BUF_SIZE_BYTES)
 
-        # If we see what we're expecting in the result, end immediately, test successful!
+        # If we see what we're expecting, end immediately, test successful!
         if uart_data:
+            # Put the uart_data into the response.
             response.result = bytearray(uart_data)
+            # The UART data should include the word "Stratos".  If it does,
+            # this means the UART data collection was successful and this
+            # test is successful.  We can return the collected data as the
+            # test response.
             if b"Stratos" in response.result:
                 return
 
+    # If we have fallen through the test loop, set the error response
+    # and return.
     response = set_error_response(response)
+    return
