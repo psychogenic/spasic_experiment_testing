@@ -166,7 +166,7 @@ class TinyQV:
             
         return bytes_written
 
-    def run_qspi(self, params, program, response):
+    def run_qspi_simple(self, params, program, response):
         self.program = program
         
         loops = 0
@@ -191,6 +191,47 @@ class TinyQV:
 
         response.result[9] = 2
 
+    def run_qspi_in_out(self, params, program, response):
+        self.program = program
+        tt = self.tt
+        
+        loops = 0
+        data = params.argument_bytes[1:]
+        out_idx = 0
+        response.result[9] = 1
+        in_idx = 0
+        tt.ui_in.value = (data[in_idx] & 0x7f)
+        in7 = 0
+        while params.keep_running:
+            while tt.uio_out[FLASH_CS] == 1 and tt.uio_out[RAM_CS] == 1:
+                toggle_clock()
+            addr = self.read_addr()
+            #print(f"Address: {addr}")
+            bytes_written = self.write_data(addr & 0xFFFF)
+            #print(f"Bytes written: {bytes_written}")
+            response.result[out_idx] = tt.uo_out.value
+            #print(f"Received: {response.result[out_idx]}")
+            
+            loops += 1
+            #print(response.result[0])
+            response.result[5:7] = addr.to_bytes(2, 'little')
+            response.result[7:9] = loops.to_bytes(2, 'little')
+            
+            if self.tt.uo_out.value == 255:
+                response.result[9] = 3
+                return
+
+            out_idx = (out_idx + 1) % 5
+            if in7 == 0:
+                tt.ui_in.value = (data[in_idx] & 0x7f) | 0x80
+                in7 = 1
+                #print(f"Sent: {data[in_idx] & 0x7f:02x}")
+            else:
+                if in_idx < len(data): in_idx += 1
+                tt.ui_in.value = (data[in_idx] & 0x7f)
+                in7 = 0
+        response.result[9] = 2
+    
 def test_count(params:ExperimentParameters, response:ExpResult):
     # Simple program that loops incrementing the outputs
     program = bytes([0x13, 0x04, 0xf0, 0x0f, 0x22, 0xe6, 0x93, 0x04, 0x00, 0x00, 0x26, 0xe0, 0x85, 0x04, 0xf5, 0xbf, 0, 0, 0, 0])
@@ -203,4 +244,24 @@ def test_count(params:ExperimentParameters, response:ExpResult):
     
     # Start up TQV
     tqv = TinyQV(tt)
-    tqv.run_qspi(params, program, response)
+    tqv.run_qspi_simple(params, program, response)
+
+def test_in_out(params:ExperimentParameters, response:ExpResult):
+    # Simple program that reads some data from the inputs and then writes it to the outputs
+    # This effectively reverses the 4 bytes of input data to the result
+    program = bytes([0x13, 0x04, 0xf0, 0x0f, 0x22, 0xe6, 0x01, 0x45, 0x91, 0x45, 0x12, 0x64, 0x93, 0x74, 0x04, 0x08
+                , 0xed, 0xdc, 0x13, 0x74, 0xf4, 0x07, 0x1e, 0x05, 0x41, 0x8d, 0x12, 0x64, 0x93, 0x74, 0x04, 0x08
+                , 0xed, 0xfc, 0xfd, 0x15, 0xfd, 0xf1, 0x91, 0x45, 0x93, 0x74, 0xf5, 0x07, 0x26, 0xe0, 0x1d, 0x81
+                , 0xfd, 0x15, 0xfd, 0xf9, 0x09, 0xa0, 0x13, 0x04, 0xf0, 0x0f, 0x22, 0xe0, 0xed, 0xbf
+                , 0, 0, 0, 0])
+
+    # Response looks like BYTES_RECEIVED DATA[0..8]
+    response.result = bytearray(10)
+    
+    # get the TT DemoBoard object from params passed in
+    tt = params.tt 
+    
+    # Start up TQV
+    tqv = TinyQV(tt)
+    tqv.run_qspi_in_out(params, program, response)
+

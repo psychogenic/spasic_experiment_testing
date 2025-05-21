@@ -18,7 +18,10 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
         import spasic.experiment.tt_um_MichaelBell_tinyQV.tqv
         
         # run that experiment
-        spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_count(params, response)
+        if params.argument_bytes[0] == 0:
+            spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_count(params, response)
+        elif params.argument_bytes[0] == 1:
+            spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_in_out(params, response)
         
     except Exception as e:
         # an exception occurred... 
