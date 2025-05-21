@@ -23,8 +23,8 @@ ExperimentsAvailable = {
         # calvin!  
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment, 
         
-        # 5 TinyQV
-        5: spasic.experiment.tt_um_MichaelBell_tinyQV.loader.run_experiment,
+        # 9 TinyQV
+        9: spasic.experiment.tt_um_MichaelBell_tinyQV.loader.run_experiment,
         
     }
 

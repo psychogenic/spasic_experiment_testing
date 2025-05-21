@@ -209,14 +209,14 @@ class TinyQV:
             #print(f"Address: {addr}")
             bytes_written = self.write_data(addr & 0xFFFF)
             #print(f"Bytes written: {bytes_written}")
-            response.result[out_idx] = tt.uo_out.value
             #print(f"Received: {response.result[out_idx]}")
             
             loops += 1
             #print(response.result[0])
-            response.result[5:7] = addr.to_bytes(2, 'little')
-            response.result[7:9] = loops.to_bytes(2, 'little')
+            response.result[5:6] = addr.to_bytes(1, 'little')
+            response.result[6:9] = loops.to_bytes(3, 'little')
             
+            response.result[out_idx] = tt.uo_out.value
             if self.tt.uo_out.value == 255:
                 response.result[9] = 3
                 return
@@ -227,7 +227,7 @@ class TinyQV:
                 in7 = 1
                 #print(f"Sent: {data[in_idx] & 0x7f:02x}")
             else:
-                if in_idx < len(data): in_idx += 1
+                if in_idx + 1 < len(data): in_idx += 1
                 tt.ui_in.value = (data[in_idx] & 0x7f)
                 in7 = 0
         response.result[9] = 2
@@ -265,3 +265,25 @@ def test_in_out(params:ExperimentParameters, response:ExpResult):
     tqv = TinyQV(tt)
     tqv.run_qspi_in_out(params, program, response)
 
+def test_prime(params:ExperimentParameters, response:ExpResult):
+    # Tests whether the input number, provided in 7-bits per byte big endian format, is prime.
+    # Outputs 1, 1, 1, 1 if prime, otherwise the smallest factor.
+    program = bytes([0x13, 0x04, 0xf0, 0x0f, 0x22, 0xe6, 0x01, 0x45, 0x91, 0x45, 0x12, 0x64, 0x93, 0x74, 0x04, 0x08
+, 0xed, 0xdc, 0x13, 0x74, 0xf4, 0x07, 0x1e, 0x05, 0x41, 0x8d, 0x12, 0x64, 0x93, 0x74, 0x04, 0x08
+, 0xed, 0xfc, 0xfd, 0x15, 0xfd, 0xf1, 0x25, 0x20, 0x91, 0x45, 0x93, 0x74, 0xf5, 0x07, 0x26, 0xe0
+, 0x1d, 0x81, 0xfd, 0x15, 0xfd, 0xf9, 0x09, 0xa0, 0x13, 0x04, 0xf0, 0x0f, 0x22, 0xe0, 0xed, 0xbf
+, 0x36, 0x85, 0x82, 0x80, 0x37, 0x45, 0x20, 0x00, 0x13, 0x05, 0x15, 0x08, 0x82, 0x80, 0x89, 0x46
+, 0xe3, 0x0a, 0xd5, 0xfe, 0x93, 0x75, 0x15, 0x00, 0xe5, 0xd5, 0x85, 0x46, 0x89, 0x06, 0xe3, 0x83
+, 0xa6, 0xfe, 0xb3, 0x85, 0xd6, 0x04, 0xe3, 0x8d, 0xa5, 0xfc, 0xe3, 0x4d, 0xb5, 0xfc, 0x36, 0x86
+, 0x36, 0x96, 0xe3, 0x07, 0xa6, 0xfc, 0xe3, 0x4d, 0xa6, 0xfe, 0xcd, 0xb7
+                    , 0, 0, 0, 0])
+
+    # Response looks like BYTES_RECEIVED DATA[0..8]
+    response.result = bytearray(10)
+    
+    # get the TT DemoBoard object from params passed in
+    tt = params.tt
+    
+    # Start up TQV
+    tqv = TinyQV(tt)
+    tqv.run_qspi_in_out(params, program, response)
