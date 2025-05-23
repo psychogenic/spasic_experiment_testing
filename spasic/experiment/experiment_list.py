@@ -24,6 +24,6 @@ ExperimentsAvailable = {
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
 
         # Dice roller
-        7: spasic.experiment.tt_um_ttrpg_dice.loader.run_experiment,    
+        11: spasic.experiment.tt_um_ttrpg_dice.loader.run_experiment,    
     }
 

@@ -18,7 +18,7 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
         import spasic.experiment.tt_um_ttrpg_dice.dice_roller
         
         # run that experiment
-        spasic.experiment.tt_um_ttrpg_dice.dice_roller.test_dice(params, response, timeout=30)
+        spasic.experiment.tt_um_ttrpg_dice.dice_roller.test_dice(params, response)
         
     except Exception as e:
         # an exception occurred... 
