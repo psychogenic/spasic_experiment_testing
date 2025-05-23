@@ -61,15 +61,11 @@ def readR2(ser):
 
 def moveResToR1(ser):
     result = readRes(ser)
-    if result is None:
-        return None
     setR1(ser, result)
     return result
 
 def moveResToR2(ser):
     result = readRes(ser)
-    if result is None:
-        return None
     setR2(ser, result)
     return result
 
