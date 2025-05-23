@@ -156,7 +156,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     sqrt(ser)
 
     temp = moveResToR1(ser) 
-    if temp == None:
+    if temp ==  b'\xff\xff\xff':
         status_string[1] = 0x1
         fpu_result = bytearray(3)
     else:
@@ -175,7 +175,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     div(ser)
 
     intermediate_1 = readRes(ser)
-    if intermediate_1 == None:
+    if intermediate_1 ==  b'\xff\xff\xff':
         status_string[1] = 0x2
         fpu_result = bytearray(3)
     else:
@@ -194,7 +194,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     sqrt(ser)
     
     temp = moveResToR1(ser)
-    if temp == None:
+    if temp == b'\xff\xff\xff':
         status_string[1] = 0x3
         fpu_result = bytearray(3)
     else:
@@ -213,7 +213,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     mul(ser)
 
     temp = moveResToR1(ser)
-    if temp == None:
+    if temp == b'\xff\xff\xff':
         status_string[1] = 0x4
         fpu_result = bytearray(3)
     else:
@@ -232,7 +232,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     div(ser)
 
     temp = moveResToR2(ser)
-    if temp == None:
+    if temp == b'\xff\xff\xff':
         status_string[1] = 0x5
         fpu_result = bytearray(3)
     else:
@@ -251,7 +251,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
     sub(ser)
 
     temp = moveResToR2(ser)
-    if temp == None:
+    if temp == b'\xff\xff\xff':
         status_string[1] = 0x6
         fpu_result = bytearray(3)
     else:
@@ -271,7 +271,7 @@ def test_pi(params:ExperimentParameters, response:ExpResult, num_iterations:int=
 
     pi_approx = readRes(ser)
 
-    if pi_approx == None:
+    if pi_approx == b'\xff\xff\xff':
         status_string[1] = 0x7
         fpu_result = bytearray(3)
     else:
