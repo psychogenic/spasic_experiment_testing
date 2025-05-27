@@ -13,6 +13,8 @@ import spasic.experiment.tt_um_ttrpg_dice.loader
 import spasic.experiment.tt_um_andrewtron3000.loader
 import spasic.experiment.wokwi_universal_gates_049.loader
 import spasic.experiment.tt_um_ttrpg_SEU.loader
+import spasic.experiment.tt_um_MichaelBell_tinyQV.loader
+import spasic.experiment.tt_um_lisa.loader
 
 ExperimentsAvailable = {
     
