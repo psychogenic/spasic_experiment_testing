@@ -33,5 +33,9 @@ ExperimentsAvailable = {
   
         # universal gates
         7: spasic.experiment.wokwi_universal_gates_049.loader.run_experiment,
+  
+        # 9 TinyQV
+        9: spasic.experiment.tt_um_MichaelBell_tinyQV.loader.run_experiment,
+        
     }
 
