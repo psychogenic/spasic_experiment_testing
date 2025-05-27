@@ -7,11 +7,11 @@ import spasic.experiment.tt_um_test.loader
 import spasic.experiment.tt_um_fstolzcode.loader
 import spasic.experiment.tt_um_oscillating_bones.loader
 import spasic.experiment.tt_um_qubitbytes_alive.loader
+import spasic.experiment.tt_um_msg_in_a_bottle.loader
 import spasic.experiment.tt_um_ttrpg_dice.loader
 import spasic.experiment.tt_um_andrewtron3000.loader
 import spasic.experiment.wokwi_universal_gates_049.loader
 import spasic.experiment.tt_um_ttrpg_SEU.loader
-
 ExperimentsAvailable = {
     
         # 1 sample experiment
@@ -42,6 +42,9 @@ ExperimentsAvailable = {
         10: spasic.experiment.tt_um_lisa.loader.run_experiment,
   
         # Dice roller
-        11: spasic.experiment.tt_um_ttrpg_dice.loader.run_experiment
+        11: spasic.experiment.tt_um_ttrpg_dice.loader.run_experiment,
+  
+        # Pinecone
+        12: spasic.experiment.tt_um_msg_in_a_bottle.loader.run_experiment,
 
 }
