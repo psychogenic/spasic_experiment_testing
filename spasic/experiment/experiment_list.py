@@ -36,6 +36,9 @@ ExperimentsAvailable = {
   
         # 9 TinyQV
         9: spasic.experiment.tt_um_MichaelBell_tinyQV.loader.run_experiment,
-        
-    }
+  
+        # lisa  
+        10: spasic.experiment.tt_um_lisa.loader.run_experiment
+
+}
 
