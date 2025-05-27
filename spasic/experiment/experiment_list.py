@@ -7,6 +7,7 @@ import spasic.experiment.tt_um_test.loader
 import spasic.experiment.tt_um_fstolzcode.loader
 import spasic.experiment.tt_um_oscillating_bones.loader
 import spasic.experiment.tt_um_qubitbytes_alive.loader
+import spasic.experiment.tt_um_cejmu.loader
 
 ExperimentsAvailable = {
     
@@ -21,5 +22,8 @@ ExperimentsAvailable = {
         
         # calvin!  
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
+
+        # TinyRV1 from the University of Wuerzburg
+        17: spasic.experiment.tt_um_cejmu.loader.run_experiment,
     }
 
