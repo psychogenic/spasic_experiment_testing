@@ -7,6 +7,7 @@ import spasic.experiment.tt_um_test.loader
 import spasic.experiment.tt_um_fstolzcode.loader
 import spasic.experiment.tt_um_oscillating_bones.loader
 import spasic.experiment.tt_um_qubitbytes_alive.loader
+import spasic.experiment.tt_um_andrewtron3000.loader
 import spasic.experiment.wokwi_universal_gates_049.loader
 import spasic.experiment.tt_um_ttrpg_SEU.loader
 
@@ -23,7 +24,10 @@ ExperimentsAvailable = {
         
         # calvin!  
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
-
+  
+        # Rule 30 Engine!
+        5: spasic.experiment.tt_um_andrewtron3000.loader.run_experiment,
+  
         # SEU detector in ttrpgdice
         6: spasic.experiment.tt_um_ttrpg_SEU.loader.run_experiment,
   
