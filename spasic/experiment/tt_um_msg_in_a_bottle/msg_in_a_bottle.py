@@ -30,14 +30,16 @@ def inspect_bottle(_params:ExperimentParameters, response:ExpResult):
 
     # rjust in uPython
     padded = "{:>10}".format(shunted)
-
+    
     # tx payload
-    response.result = bytes(padded, "utf8")
+    response.result = bytearray(padded, "ascii")
 
     return
 
 # @TODO get number from tt_um_rng
-def uncork_bottle(idx: int = random.randint(0, len(messages) - 1)):
+def uncork_bottle(idx: int = None):
+    if idx is None:
+        idx = random.randint(0, len(messages) - 1)
     _idx = idx
 
     # prevent out-of-bounds
