@@ -1,4 +1,4 @@
-import spasic.experiment.tt_um_ttrpg_dice.sevenseg
+from spasic.experiment.tt_um_ttrpg_dice.sevenseg import SevenSegmentDecode
 import time
 
 def roll(tt, button):
