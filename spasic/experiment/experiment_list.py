@@ -7,6 +7,7 @@ import spasic.experiment.tt_um_test.loader
 import spasic.experiment.tt_um_fstolzcode.loader
 import spasic.experiment.tt_um_oscillating_bones.loader
 import spasic.experiment.tt_um_qubitbytes_alive.loader
+import spasic.experiment.tt_um_msg_in_a_bottle.loader
 
 ExperimentsAvailable = {
     
@@ -21,5 +22,8 @@ ExperimentsAvailable = {
         
         # calvin!  
         4: spasic.experiment.tt_um_qubitbytes_alive.loader.run_experiment,    
+
+        # Pinecone
+        12: spasic.experiment.tt_um_msg_in_a_bottle.loader.run_experiment,
     }
 
