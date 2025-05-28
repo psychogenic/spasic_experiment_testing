@@ -50,6 +50,11 @@ def run_test(params:ExperimentParameters, response:ExpResult, num_iterations:int
             tt.uio_in.value = hi
             response.result[1] = hi
             for lo in range(256):
+                
+                if not params.keep_running:
+                    # We've been asked to terminate. Indicate reason in results array
+                    response.result[0:4] = b'TERM'
+                    return
                 tt.ui_in.value = lo
                 response.result[2] = lo
                 rout = ref(hi, lo)
