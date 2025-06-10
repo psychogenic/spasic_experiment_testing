@@ -24,6 +24,10 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
             spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_in_out(params, response)
         elif params.argument_bytes[0] == 2:
             spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_prime(params, response)
+        elif params.argument_bytes[0] == 3:
+            spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_strcpy(params, response)
+        elif params.argument_bytes[0] == 4:
+            spasic.experiment.tt_um_MichaelBell_tinyQV.tqv.test_ruler(params, response)
         
     except Exception as e:
         # an exception occurred... 
