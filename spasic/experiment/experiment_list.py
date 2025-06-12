@@ -16,6 +16,7 @@ import spasic.experiment.tt_um_ttrpg_SEU.loader
 import spasic.experiment.tt_um_MichaelBell_tinyQV.loader
 import spasic.experiment.tt_um_lisa.loader
 import spasic.experiment.tt_um_cejmu.loader
+import spasic.experiment.rp2_temperature.loader
 
 ExperimentsAvailable = {
     
@@ -57,4 +58,7 @@ ExperimentsAvailable = {
         
         # TinyRV1 from the University of Wuerzburg
         13: spasic.experiment.tt_um_cejmu.loader.run_experiment,
+        
+        # RP2 temperature measurement
+        14: spasic.experiment.rp2_temperature.loader.run_experiment,
 }
