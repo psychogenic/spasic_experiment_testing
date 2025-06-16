@@ -170,6 +170,9 @@ class ExperimentRunner:
         runner(self._params, self._result)
 
         
+    def launch_and_monitor(self, experiment_id:int, experiment_parameters:bytearray=None):
+        self.launch(experiment_id, experiment_parameters)
+        self.monitor_until_completed()
         
     def launch(self, experiment_id:int, experiment_parameters:bytearray=None):
         '''
