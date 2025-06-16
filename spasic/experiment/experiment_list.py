@@ -17,6 +17,7 @@ import spasic.experiment.tt_um_MichaelBell_tinyQV.loader
 import spasic.experiment.tt_um_lisa.loader
 import spasic.experiment.tt_um_cejmu.loader
 import spasic.experiment.rp2_temperature.loader
+import spasic.experiment.tt_um_CKPope_top.loader
 
 ExperimentsAvailable = {
     
@@ -61,4 +62,7 @@ ExperimentsAvailable = {
         
         # RP2 temperature measurement
         14: spasic.experiment.rp2_temperature.loader.run_experiment,
+        
+        # X/Y motion controller
+        15: spasic.experiment.tt_um_CKPope_top.loader.run_experiment,
 }
