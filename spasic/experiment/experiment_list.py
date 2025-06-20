@@ -18,6 +18,7 @@ import spasic.experiment.tt_um_lisa.loader
 import spasic.experiment.tt_um_cejmu.loader
 import spasic.experiment.rp2_temperature.loader
 import spasic.experiment.tt_um_CKPope_top.loader
+import spasic.experiment.tt_um_PAL.loader
 
 ExperimentsAvailable = {
     
@@ -65,4 +66,7 @@ ExperimentsAvailable = {
         
         # X/Y motion controller
         15: spasic.experiment.tt_um_CKPope_top.loader.run_experiment,
+
+        # PAL test
+        16: spasic.experiment.tt_um_PAL.loader.run_experiment,
 }
