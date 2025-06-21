@@ -20,6 +20,7 @@ import spasic.experiment.rp2_temperature.loader
 import spasic.experiment.tt_um_CKPope_top.loader
 import spasic.experiment.tt_um_PAL.loader
 import spasic.experiment.tt_um_dlmiles_muldiv8.loader
+import spasic.experiment.tt_um_dlmiles_muldiv8_sky130faha.loader
 
 ExperimentsAvailable = {
     
@@ -73,4 +74,8 @@ ExperimentsAvailable = {
 
         # MULDIV8 (composite cells)
         17: spasic.experiment.tt_um_dlmiles_muldiv8.loader.run_experiment,
+
+        # MULDIV8 (fa/ha cells)
+        18: spasic.experiment.tt_um_dlmiles_muldiv8_sky130faha.loader.run_experiment,
+
 }
