@@ -6,8 +6,22 @@ from spasic.experiment.experiment_result import ExpResult
 from spasic.experiment.experiment_parameters import ExperimentParameters
 
 
-def wait() -> None:
+def wait(n: int = 1) -> None:
+    time.sleep_ms(n)
     pass
+
+
+def addr_set(tt, uio_in: int, bf: bool = None, skip_commit: bool = False) -> int:
+    if bf is None:
+        uio_in ^= 0x1 # invert
+    elif bf:
+        uio_in |= 0x1 # A1
+    else:
+        uio_in &= ~0x1 # A0
+    if not skip_commit:
+        tt.uio_in.value = uio_in
+        wait()
+    return uio_in
 
 
 def clock_on(tt) -> None:
@@ -74,6 +88,7 @@ def entrypoint(params:ExperimentParameters, response:ExpResult):
     time.sleep_ms(1)
     tt.clock_project_once()
     tt.clock_project_once()
+    tt.uio_oe_pico = 0b11001001
     clock_on(tt)
     tt.rst_n(True)
 
@@ -103,42 +118,27 @@ def entrypoint(params:ExperimentParameters, response:ExpResult):
         #uio_in = tt.uio_in.value
         uio_in |= b_set
         uio_in &= b_reset
-        uio_in |= 0x1 # bit0=1 A1
-        tt.uio_in.value = uio_in
+        uio_in = addr_set(tt, uio_in, False) # bit0=0 A0
         #print(f'set={b_set:02x} reset={b_reset:02x} uio_in={uio_in:02x} ')
-        wait()
 
         tt.ui_in.value = p_a
-        clock_cycle(tt)
+        clock_off(tt)
+        clock_on(tt)
 
         tt.ui_in.value = p_b
-        uio_in &= ~0x1 # bit0=0 A0
-        tt.uio_in.value = uio_in
-        clock_cycle(tt)
-
-        tt.ui_in.value = p_a
-        uio_in |= 0x1 # bit0=1 A1
-        tt.uio_in.value = uio_in
-        #clock_cycle(tt)
-        wait()
-        clock_off(tt) ##
-
-        r_a = tt.uo_out.value
-        c_a = tt.uio_out.value
-        #print(f'r_a={r_a} c_a={c_a}')
-
-        #tt.ui_in.value = p_b
-        uio_in &= ~0x1 # bit0=0 A0
-        tt.uio_in.value = uio_in
-        #clock_cycle(tt)
-        wait()
+        uio_in = addr_set(tt, uio_in, True) # bit0=1 A1
+        clock_off(tt)
+        clock_on(tt)
 
         r_b = tt.uo_out.value
         c_b = tt.uio_out.value
-        #print(f'r_b={r_b} c_b={c_b}')
+        #print(f'r_b={r_b} c_b={c_b} uio_in={tt.uio_in.value}={uio_in:02x}')
 
-        clock_on(tt) ##
-        clock_cycle(tt) ##
+        uio_in = addr_set(tt, uio_in, False) # bit0=0 A0
+
+        r_a = tt.uo_out.value
+        c_a = tt.uio_out.value
+        #print(f'r_a={r_a} c_a={c_a} uio_in={tt.uio_in.value}={uio_in:02x}')
 
         r = (int(r_a) & 0xff) | ((int(r_b) << 8) & 0xff00)
         c = (int(c_a) & 0xff) | ((int(c_b) << 8) & 0xff00)
