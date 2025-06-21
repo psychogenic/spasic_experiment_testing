@@ -19,6 +19,7 @@ import spasic.experiment.tt_um_cejmu.loader
 import spasic.experiment.rp2_temperature.loader
 import spasic.experiment.tt_um_CKPope_top.loader
 import spasic.experiment.tt_um_PAL.loader
+import spasic.experiment.tt_um_dlmiles_muldiv8.loader
 
 ExperimentsAvailable = {
     
@@ -69,4 +70,7 @@ ExperimentsAvailable = {
 
         # PAL test
         16: spasic.experiment.tt_um_PAL.loader.run_experiment,
+
+        # MULDIV8 (composite cells)
+        17: spasic.experiment.tt_um_dlmiles_muldiv8.loader.run_experiment,
 }
