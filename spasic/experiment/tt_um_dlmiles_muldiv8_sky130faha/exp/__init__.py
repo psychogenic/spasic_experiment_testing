@@ -62,10 +62,14 @@ def clock_cycle(tt, count: int = 1) -> None:
 # Response structure
 def populate_response(ba: bytearray, count: int, r: int, c: int, good_count: int, last: int) -> None:
     ba[0:2] = r.to_bytes(2, 'little')
-    tmp = (c & 0xfff0) | (last & 0x0f)
+    tmp = (c & 0xf0f0) | (last & 0x0f)
+    # c BITS expected only [13:12] [5:4] are valid from EDIV0/EOVER
+    if count & 0xff0000 == good_count & 0xff0000:
+        tmp |= 0x0400 # MSB is valid
     ba[2:4] = tmp.to_bytes(2, 'little')
     ba[4:8] = count.to_bytes(4, 'little')
-    ba[8:10] = good_count.to_bytes(2, 'little')
+    ba[8:10] = good_count.to_bytes(2, 'little') # LSBs
+    #print(f'RESULT = r={r:04x} c_and_flags={tmp:04x} count={count:06x} good_count={good_count:06x}')
     #print(f'RESULT = {ba}')
     return count
 
@@ -119,7 +123,7 @@ def entrypoint(params:ExperimentParameters, response:ExpResult):
 
     uio_in = 0
     maxloop = p_loop
-    # Some defaults for all zero input (interate once for 0 * 0 = 0)
+    # Some defaults for all zero input (iterate once for 0 * 0 = 0)
     if p_mode == 0 and p_bits == 0 and p_a == 0 and p_b == 0 and p_loop == 0:
         maxloop = 1 # default (all data zero, do 1 iteration)
         p_bits = 0x08 # MUL/UNS=0 and REG=0x08
@@ -166,9 +170,11 @@ def entrypoint(params:ExperimentParameters, response:ExpResult):
         r = (int(r_a) & 0xff) | ((int(r_b) << 8) & 0xff00)
         c = (int(c_a) & 0xff) | ((int(c_b) << 8) & 0xff00)
 
-        count += 1
+        if count < 0xffffff: # no wrap
+            count += 1
         if r == p_expect:
-            good_count += 1
+            if good_count < 0xffffff: # no wrap
+                good_count += 1
             m = 'PASS'
         else:
             m = 'FAIL'
