@@ -52,8 +52,8 @@ def clock_off(tt) -> None:
 def clock_cycle(tt, count: int = 1) -> None:
     while count > 0:
         if tt.pins.pin_rp_projclk():
-           clock_off(tt)
-           wait()
+            clock_off(tt)
+            wait()
         clock_on(tt)
         wait()
         count -= 1

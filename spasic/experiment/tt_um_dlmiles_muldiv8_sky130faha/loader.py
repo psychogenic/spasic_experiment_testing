@@ -25,7 +25,7 @@ def run_experiment(params:ExperimentParameters, response:ExpResult):
         # an exception occurred... 
         # let the server know about it
         response.exception = e
-        sys.print_exception(e) # DEBUG
+        # sys.print_exception(e) # DEBUG
     else:
         # we get here, all went well
         # mark the experiment as completed
